@@ -53,23 +53,41 @@ jobs:
 
       - name: Build frontend
         working-directory: frontend
-        run: npm run build
-
-  docker-build:
+        run: npm run build 
+  docker-build:  
     runs-on: ubuntu-latest
 
     needs:
       - backend-test
       - frontend-build
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build backend Docker image
         run: |
-          docker build -t taskflow-backend:ci ./backend
+          docker build -t ghcr.io/${{ github.repository_owner }}/taskflow-backend:latest ./backend
+
+      - name: Push backend Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/taskflow-backend:latest
 
       - name: Build frontend Docker image
         run: |
-          docker build -t taskflow-frontend:ci ./frontend
+          docker build -t ghcr.io/${{ github.repository_owner }}/taskflow-frontend:latest ./frontend
+
+      - name: Push frontend Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/taskflow-frontend:latest 
