@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: backend
-          image: taskflow-backend:v2
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/prateek269/taskflow-backend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           env:

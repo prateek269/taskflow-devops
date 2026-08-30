@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: taskflow-frontend:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/prateek269/taskflow-frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5173
