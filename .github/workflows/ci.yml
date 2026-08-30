@@ -91,3 +91,27 @@ jobs:
       - name: Push frontend Docker image
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/taskflow-frontend:latest 
+  deploy:
+    runs-on: self-hosted
+
+    needs:
+      - docker-build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/postgres-deployment.yml
+          kubectl apply -f k8s/postgres-service.yml
+          kubectl apply -f k8s/backend-deployment.yml
+          kubectl apply -f k8s/backend-service.yml
+          kubectl apply -f k8s/frontend-deployment.yml
+          kubectl apply -f k8s/frontend-service.yml
+
+      - name: Check Kubernetes deployment
+        run: |
+          kubectl get pods
+          kubectl get deployments
+          kubectl get services        
