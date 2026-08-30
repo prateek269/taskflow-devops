@@ -100,7 +100,7 @@ function App() {
 
       <header className="header">
         <h1>TaskFlow</h1>
-        <p>Team Task Management Dashboard</p>
+        <p>TaskFlow - DevOps Task Management Dashboard</p>
       </header>
 
       <section className="add-task">
