@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import psycopg2
@@ -6,13 +7,12 @@ app = Flask(__name__)
 CORS(app)
 
 
-# PostgreSQL connection
 def get_db_connection():
     return psycopg2.connect(
-        host="postgres",
-        database="taskflow_db",
-        user="postgres",
-        password="postgres"
+        host=os.getenv("DB_HOST", "postgres"),
+        database=os.getenv("DB_NAME", "taskflow_db"),
+        user=os.getenv("DB_USER", "postgres"),
+        password=os.getenv("DB_PASSWORD")
     )
 
 
@@ -42,10 +42,8 @@ def health():
         }), 500
 
 
-# GET all tasks
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -70,10 +68,8 @@ def get_tasks():
     return jsonify(tasks)
 
 
-# POST new task
 @app.route("/tasks", methods=["POST"])
 def create_task():
-
     data = request.get_json()
 
     if not data or not data.get("title"):
@@ -107,10 +103,8 @@ def create_task():
     }), 201
 
 
-# PUT update task
 @app.route("/tasks/<int:task_id>", methods=["PUT"])
 def update_task(task_id):
-
     data = request.get_json()
 
     conn = get_db_connection()
@@ -153,10 +147,8 @@ def update_task(task_id):
     })
 
 
-# DELETE task
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):
-
     conn = get_db_connection()
     cursor = conn.cursor()
 
