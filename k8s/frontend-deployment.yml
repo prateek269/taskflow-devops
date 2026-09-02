@@ -17,4 +17,4 @@ spec:
           image: ghcr.io/prateek269/taskflow-frontend:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 5173
+            - containerPort: 80
