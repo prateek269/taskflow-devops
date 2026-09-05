@@ -9,3 +9,4 @@ dist/
 .env.*
 !.env.example
 backend/app_backup.py
+actions-runner/
